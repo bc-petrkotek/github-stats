@@ -1,0 +1,13 @@
+{
+    "name": "petrkotek/github-stats",
+    "description": "Tool to fetch various stats from GitHub",
+    "require": {
+        "knplabs/github-api": "~1.4"
+    },
+    "authors": [
+        {
+            "name": "Petr Kotek",
+            "email": "petr.kotek@bigcommerce.com"
+        }
+    ]
+}
