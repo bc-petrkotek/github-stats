@@ -10,29 +10,30 @@ define('PER_PAGE', 100);
 
 $username = getenv('GITHUB_USERNAME');
 $password = getenv('GITHUB_PASSWORD');
-$repository = getenv('GITHUB_REPOSITORY');
-if (!empty($repository)) {
-    list ($gitHubOrganisation, $gitHubRepository) = explode('/', $repository);
-}
 
-if (empty($username) || empty($password) || empty($gitHubOrganisation) || empty($gitHubRepository)) {
+
+if (empty($username) || empty($password)) {
     die(
         "No username/password/repository specified." . PHP_EOL .
         "To specify it, run these commands:" . PHP_EOL .
         "  export GITHUB_USERNAME=username" . PHP_EOL .
-        "  export GITHUB_PASSWORD=password" . PHP_EOL .
-        "  export GITHUB_REPOSITORY=organisation/repository" . PHP_EOL
+        "  export GITHUB_PASSWORD=password" . PHP_EOL
     );
 }
 
-if (empty($argv[1]) || empty($argv[2])) {
+if (empty($argv[1]) || empty($argv[2]) || empty($argv[3])) {
     die(
         "Please specify local repository path and branch via command line arguments, e.g.:" . PHP_EOL .
-        "  php main.php ../repository-path master > pull_request_stats.txt" . PHP_EOL
+        "  php main.php organisation/repository ../local-repository-path master > pull_request_stats.txt" . PHP_EOL
     );
 }
-$localRepoPath = $argv[1];
-$localRepoBranch = $argv[2];
+$repository = $argv[1];
+$localRepoPath = $argv[2];
+$localRepoBranch = $argv[3];
+
+if (!empty($repository)) {
+    list ($gitHubOrganisation, $gitHubRepository) = explode('/', $repository);
+}
 
 $gitFullTree = shell_exec("cd $localRepoPath && git ls-tree --full-tree --name-only -r $localRepoBranch");
 $localRepoFiles = explode("\n", $gitFullTree);
