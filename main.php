@@ -73,9 +73,10 @@ foreach ($openPullRequests as $pullRequest) {
     foreach ($files as $file) {
         $filename = $file['filename'];
         if (!isset($modifiedFilesMap[$filename])) {
-            $modifiedFilesMap[$filename] = array('pr_count' => 0, 'changes_count' => 0);
+            $modifiedFilesMap[$filename] = array('pr_count' => 0, 'changes_count' => 0, 'pr_ids' => array());
         }
         $modifiedFilesMap[$filename]['pr_count']++;
+        $modifiedFilesMap[$filename]['pr_ids'][] = $number;
         $modifiedFilesMap[$filename]['changes_count'] += $file['changes'];
     }
     echo "OK." . PHP_EOL;
@@ -91,7 +92,7 @@ foreach ($localRepoFiles as $localRepoFile) {
     if (isset($modifiedFilesMap[$localRepoFile])) {
         $filesWithPRCount++;
         $stats = $modifiedFilesMap[$localRepoFile];
-        $row = array("Y", $localRepoFile, $stats['pr_count'], $stats['changes_count']);
+        $row = array("Y", $localRepoFile, $stats['pr_count'], $stats['changes_count'], implode(',', $stats['pr_ids']));
     } else {
         $row = array("N", $localRepoFile);
     }
